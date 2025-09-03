@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="action_import_packing_csv" model="ir.actions.act_window">
+        <field name="name">Импорт заданий из CSV</field>
+        <field name="res_model">import.packing.csv.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="view_import_packing_csv_wizard"/>
+    </record>
+</odoo>

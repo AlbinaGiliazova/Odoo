@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_packing_order_user,Packing Order user,model_packing_order,packing_operation.group_packing_user,1,0,1,0
+access_packing_order_manager,Packing Order manager,model_packing_order,packing_operation.group_packing_manager,1,1,1,1
+
+access_packing_order_line_user,Packing Order Line user,model_packing_order_line,packing_operation.group_packing_user,1,0,1,0
+access_packing_order_line_manager,Packing Order Line manager,model_packing_order_line,packing_operation.group_packing_manager,1,1,1,1

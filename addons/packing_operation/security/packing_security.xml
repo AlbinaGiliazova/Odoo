@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <data noupdate="1">
+
+    <!-- Пользователь упаковки -->
+    <record id="group_packing_user" model="res.groups">
+      <field name="name">Packing User</field>
+      <field name="category_id" ref="base.module_category_inventory"/>
+    </record>
+
+    <!-- Менеджер упаковки -->
+    <record id="group_packing_manager" model="res.groups">
+      <field name="name">Packing Manager</field>
+      <field name="category_id" ref="base.module_category_inventory"/>
+      <field name="implied_ids" eval="[(4, ref('packing_operation.group_packing_user'))]"/>
+    </record>
+
+  </data>
+</odoo>

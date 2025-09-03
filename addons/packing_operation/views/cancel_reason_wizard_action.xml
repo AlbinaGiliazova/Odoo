@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="action_cancel_reason_wizard" model="ir.actions.act_window">
+        <field name="name">Причина отмены</field>
+        <field name="res_model">packing.order.cancel.reason.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="view_cancel_reason_wizard_form"/>
+    </record>
+</odoo>

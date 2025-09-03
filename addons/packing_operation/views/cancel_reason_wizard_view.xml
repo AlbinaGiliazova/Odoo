@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_cancel_reason_wizard_form" model="ir.ui.view">
+        <field name="name">cancel.reason.wizard.form</field>
+        <field name="model">packing.order.cancel.reason.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Причина отмены">
+                <group>
+                    <field name="reason"/>
+                </group>
+                <footer>
+                    <button name="action_confirm"
+                            string="Подтвердить отмену"
+                            type="object"
+                            class="btn-primary"/>
+                    <button string="Отмена"
+                            special="cancel"
+                            class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

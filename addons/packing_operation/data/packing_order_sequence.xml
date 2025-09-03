@@ -1,0 +1,9 @@
+<odoo>
+    <record id="seq_packing_order" model="ir.sequence">
+        <field name="name">Packing Order</field>
+        <field name="code">packing.order</field>
+        <field name="prefix">PO</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+</odoo>
