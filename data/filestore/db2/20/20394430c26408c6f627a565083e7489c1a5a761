@@ -1,0 +1,4 @@
+Order Name,Order Date,Product ID,Product Qty,Packed Qty,Dimensions
+Заявка-1,2024-07-01,1,10,5,10x20x30
+Заявка-1,2024-07-01,2,3,2,15x30x40
+Заявка-2,2024-07-02,3,7,0,20x10x50

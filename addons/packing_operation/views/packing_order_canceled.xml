@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <!-- Дерево для отменённых заказов -->
-    <record id="view_packing_order_cancelled_tree" model="ir.ui.view">
-        <field name="name">packing.order.cancelled.tree</field>
+    <record id="view_packing_order_cancelled_list" model="ir.ui.view">
+        <field name="name">packing.order.cancelled.list</field>
         <field name="model">packing.order</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="name" string="Заказ"/>
                 <field name="line_ids" string="Детали"/>
                 <field name="cancellation_reason" string="Причина"/>
                 <field name="user_id" string="Оператор"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -18,14 +18,14 @@
     <record id="action_packing_order_cancelled" model="ir.actions.act_window">
         <field name="name">Сброшенные заказы</field>
         <field name="res_model">packing.order</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
         <field name="domain">[('state', '=', 'cancel')]</field>
-        <field name="view_id" ref="view_packing_order_cancelled_tree"/>
+        <field name="view_id" ref="view_packing_order_cancelled_list"/>
     </record>
 
     <!-- Меню для перехода к отчёту -->
     <menuitem id="menu_packing_order_cancelled"
               name="Сброшенные заказы"
-              parent="packing_operation.menu_packing_order"
+              parent="packing_operation.menu_packing_root"
               action="action_packing_order_cancelled"/>
 </odoo>

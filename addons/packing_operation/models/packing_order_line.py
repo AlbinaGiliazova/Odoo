@@ -23,6 +23,9 @@ class PackingOrderLine(models.Model):
     product_id = fields.Many2one(
         "product.product", string="Деталь", required=True
     )
+    product_id_int = fields.Integer(
+        related='product_id.id', string="ID детали", store=False
+    )
     product_qty = fields.Integer(string="Количество", required=True)
     packed_qty = fields.Integer(string="Упаковано", default=0)
 
@@ -86,3 +89,10 @@ class PackingOrderLine(models.Model):
                 line.state = 'in_progress'
             else:
                 line.state = 'waiting'
+
+    
+    @api.model
+    def increase_counter(self, value):
+        product = self.env['product.product'].browse(int(value))
+        if product:
+            product.packed_count += 1  # замените на нужное поле

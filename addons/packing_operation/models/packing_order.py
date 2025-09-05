@@ -100,3 +100,40 @@ class PackingOrder(models.Model):
                 order.state = 'in_progress'
             else:
                 order.state = 'waiting'
+
+    def action_open_packing_process(self):
+       # self – конкретный заказ
+       return {
+           'type': 'ir.actions.act_window',
+           'res_model': 'packing.order',
+           'view_mode': 'form',
+           'view_id': self.env.ref('packing_operation.view_packing_process_form').id,
+           'target': 'current',
+           'res_id': self.id,
+           # можно добавить дополнительные параметры в context
+       }
+    
+    def process_barcode_scan(self, product_id):
+        """Увеличить счетчик packed_qty в строке заказа по product_id"""
+        self.ensure_one()
+        line = self.line_ids.filtered(lambda l: l.product_id.id == product_id)
+        if not line:
+            raise UserError("В этом заказе нет строки с указанным продуктом (ID: %s)" % product_id)
+        if line.packed_qty >= line.product_qty:
+            raise UserError("Все детали этого типа уже упакованы!")
+        line.packed_qty += 1
+        # Хотите — сохраняйте дату упаковки
+        line.packing_date = fields.Datetime.now()
+        # Можно возвращать сообщение или статус, если нужно
+        return {'status': 'success', 'packed_qty': line.packed_qty}
+
+    def _update_full_packing_date(self):
+        """Обновляет дату полной упаковки при изменении packed_qty в строках заказа."""
+        self.ensure_one()
+        lines = self.line_ids.filtered(lambda l: l.packing_date)
+        if lines:
+            # Берём максимальную дату упаковки по всем строкам
+            self.full_packing_date = max(lines.mapped('packing_date'))
+        else:
+            # Если ни одной строки не упаковано, очищаем поле
+            self.full_packing_date = False

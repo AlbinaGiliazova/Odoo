@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <!-- Дерево заданий на упаковку -->
-    <record id="view_packing_order_tree" model="ir.ui.view">
-    <field name="name">packing.order.tree</field>
+    <record id="view_packing_order_list" model="ir.ui.view">
+    <field name="name">packing.order.list</field>
     <field name="model">packing.order</field>
     <field name="arch" type="xml">
-        <tree>
-            <field name="name"/>
-            <field name="state" widget="badge" options="{'style': 'color'}"/>
-            <field name="user_id"/>
-            <field name="full_packing_date"/>
-        </tree>
+        <list>
+            <field name="name" string="Название"/>
+            <field name="state" widget="badge" options="{'style': 'color'}" string="Статус"/>
+            <field name="user_id" string="Пользователь"/>
+            <field name="full_packing_date" string="Дата полной упаковки"/>
+        </list>
     </field>
     </record>
 
@@ -22,22 +22,40 @@
             <form string="Задание на упаковку">
                 <sheet>
                     <group>
-                        <field name="name"/>
-                        <field name="state" readonly="1"/>
-                        <field name="user_id"/>
-                        <field name="full_packing_date"/>
+                        <field name="name" string="Название"/>
+                        <field name="state" readonly="1" string="Статус"/>
+                        <field name="user_id" string="Пользователь"/>
+                        <field name="full_packing_date" string="Дата полной упаковки"/>
                     </group>
                     <notebook>
                         <page string="Детали заказа">
                             <field name="line_ids">
-                                <tree editable="bottom">
-                                    <field name="product_id"/>
-                                    <field name="product_qty"/>
-                                    <field name="packed_qty"/>
-                                    <field name="dimensions"/>
-                                    <field name="packing_date"/>
-                                </tree>
+                                <list editable="bottom">
+                                    <field name="product_id" string="Деталь"/>
+                                    <field name="product_id_int" string="ID детали"/>
+                                    <field name="product_qty" string="Нужно"/>
+                                    <field name="packed_qty" string="Упаковано"/>
+                                </list>                                
                             </field>
+                            <button
+                                name="action_open_packing_process"
+                                type="object"
+                                string="Открыть процесс упаковки"
+                                class="btn-primary"/>
+                            <button name="action_start_packing"
+                                type="object"
+                                string="Начать упаковку"
+                                class="btn-primary"
+                                invisible="state != 'draft'"/>
+                            <button name="action_cancel_order"
+                                type="object"
+                                string="Отменить"
+                                class="btn-secondary"
+                                invisible="state == 'cancel'"/>
+                            <button name="action_mark_done"
+                                type="object"
+                                string="Завершить"
+                                class="btn-success"/>
                         </page>
                     </notebook>
                     <footer>
@@ -45,18 +63,24 @@
                                 type="object"
                                 string="Начать упаковку"
                                 class="btn-primary"
-                                attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                                invisible="state != 'draft'"/>
                         <button name="action_cancel_order"
                                 type="object"
                                 string="Отменить"
                                 class="btn-secondary"
-                                attrs="{'invisible': [('state', '=', 'cancel')]}"/>
+                                invisible="state == 'cancel'"/>
                         <button name="action_mark_done"
                                 type="object"
                                 string="Завершить"
                                 class="btn-success"
-                                attrs="{'invisible': [('state', '!=', 'in_progress')]}"/>
+                                invisible="state != 'in_progress'"/>
+                        <button
+                                name="action_open_packing_process"
+                                type="object"
+                                string="Открыть процесс упаковки"
+                                class="btn-primary"/>
                     </footer>
+                    <field name="state" invisible="1"/>
                 </sheet>
             </form>
         </field>
@@ -70,30 +94,37 @@
         <form string="Процесс упаковки">
             <sheet>
                 <group>
-                    <field name="barcode_scanner"
+                    <field name="barcode_scanner" widget="barcode_scanner_widget"
                            placeholder="Введите ID продукта и нажмите Enter"/>
                 </group>
                 <field name="line_ids">
-                    <tree editable="bottom">
+                    <list editable="bottom">
                         <field name="product_id"/>
                         <field name="product_qty"/>
-                        <field name="packed_qty"
-                               widget="progressbar"
-                               options="{'max_field': 'product_qty'}"/>
-                        <field name="status" widget="badge" options="{'style': 'color'}"/>
-                    </tree>
+                        <field name="packed_qty"/>
+                        <field name="state" widget="badge" options="{'style': 'color'}"/>
+                    </list>
                 </field>
+                    <button name="action_mark_done"
+                            type="object"
+                            string="Завершить упаковку"
+                            class="btn-success"/>
+                    <button name="action_cancel_order"
+                            type="object"
+                            string="Отменить"
+                            class="btn-secondary"/>
                 <footer>
                     <button name="action_mark_done"
                             type="object"
                             string="Завершить упаковку"
                             class="btn-success"
-                            attrs="{'invisible': [('state', '!=', 'in_progress')]}"/>
+                            invisible = "state != 'in_progress'"/>
                     <button name="action_cancel_order"
                             type="object"
                             string="Отменить"
                             class="btn-secondary"/>
                 </footer>
+                <field name="state" invisible="1"/>
             </sheet>
         </form>
     </field>
@@ -103,7 +134,7 @@
     <record id="action_packing_order" model="ir.actions.act_window">
         <field name="name">Задания на упаковку</field>
         <field name="res_model">packing.order</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
     </record>
 
     <record id="action_import_packing_csv" model="ir.actions.act_window">
@@ -116,15 +147,20 @@
 
     <!-- Меню в разделе Склад -->
     <menuitem 
-        id="menu_packing_order"
+        id="menu_packing_root"
         name="Упаковка"
-        action="action_packing_order"
         parent="stock.menu_stock_root"/>
+
+    <menuitem
+        id="menu_packing_order"
+        name="Задания на упаковку"
+        parent="menu_packing_root"
+        action="action_packing_order"/>
 
     <menuitem
        id="menu_import_packing_csv"
        name="Импорт из CSV"
-       parent="menu_packing_order"
+       parent="menu_packing_root"
        action="action_import_packing_csv"/>
 
     <record id="action_packing_process" model="ir.actions.act_window">
@@ -137,7 +173,7 @@
 
     <menuitem id="menu_packing_process"
     name="Процесс упаковки"
-    parent="menu_packing_order"
+    parent="menu_packing_root"
     action="action_packing_process"/>
 
 </odoo>
