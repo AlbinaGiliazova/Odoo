@@ -12,6 +12,7 @@
 - разные права для оператора и менеджера,
 - приложение упаковки интегрировано в приложение склада.
 Сложность - medium.
+Видео: https://drive.google.com/file/d/1jZ8LrA_fweav1BhyZAcR31_OP229x6jk/view?usp=sharing
 
 ## Запуск Odoo с модулем в Docker
 
