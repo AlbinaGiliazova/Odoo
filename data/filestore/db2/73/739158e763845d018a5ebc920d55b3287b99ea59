@@ -1,0 +1,4 @@
+Order Name,Order Date,Product ID,Product Qty,Packed Qty
+Заявка-1,2024-07-01,1,10,5
+Заявка-1,2024-07-01,2,3,2
+Заявка-2,2024-07-02,3,7,0
