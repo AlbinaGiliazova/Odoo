@@ -20,7 +20,7 @@
     <field name="perm_create" eval="1"/>
     <field name="perm_unlink" eval="1"/>
   </record>
-  <record id="packing_order_see_product" model="ir.rule">
+  <record id="packing_manager_see_product" model="ir.rule">
     <field name="name">Manager: See Packing Orders Products</field>
     <field name="model_id" ref="model_product_product"/>
     <field name="domain_force">[]</field>
@@ -30,7 +30,7 @@
     <field name="perm_create" eval="1"/>
     <field name="perm_unlink" eval="1"/>
   </record>
-  <record id="packing_order_see_csv" model="ir.rule">
+  <record id="packing_manager_see_csv" model="ir.rule">
     <field name="name">Manager: See Packing Orders CSV</field>
     <field name="model_id" ref="model_import_packing_csv_wizard"/>
     <field name="domain_force">[]</field>
@@ -40,7 +40,7 @@
     <field name="perm_create" eval="1"/>
     <field name="perm_unlink" eval="1"/>
   </record>
-  <record id="packing_order_see_reason" model="ir.rule">
+  <record id="packing_manager_see_reason" model="ir.rule">
     <field name="name">Manager: See Packing Orders Cancel Reasons</field>
     <field name="model_id" ref="model_packing_order_cancel_reason_wizard"/>
     <field name="domain_force">[]</field>
@@ -50,4 +50,33 @@
     <field name="perm_create" eval="1"/>
     <field name="perm_unlink" eval="1"/>
   </record>
+  <record id="packing_user_see_order" model="ir.rule">
+    <field name="name">User: No delete Orders</field>
+    <field name="model_id" ref="model_packing_order"/>
+    <field name="domain_force">[]</field>
+    <field name="groups" eval="[(4, ref('packing_operation.group_packing_manager'))]"/>
+    <field name="perm_read" eval="1"/>
+    <field name="perm_write" eval="1"/>
+    <field name="perm_create" eval="1"/>
+    <field name="perm_unlink" eval="0"/>
+  </record>
+  <record id="packing_user_see_line" model="ir.rule">
+    <field name="name">User: No delete Packing Orders Lines</field>
+    <field name="model_id" ref="model_packing_order_line"/>
+    <field name="domain_force">[]</field>
+    <field name="groups" eval="[(4, ref('packing_operation.group_packing_manager'))]"/>
+    <field name="perm_read" eval="1"/>
+    <field name="perm_write" eval="1"/>
+    <field name="perm_create" eval="1"/>
+    <field name="perm_unlink" eval="0"/>
+  </record>
+  <record id="packing_user_see_product" model="ir.rule">
+    <field name="name">User: No delete Products</field>
+    <field name="model_id" ref="model_product_product"/>
+    <field name="domain_force">[]</field>
+    <field name="groups" eval="[(4, ref('packing_operation.group_packing_manager'))]"/>
+    <field name="perm_read" eval="1"/>
+    <field name="perm_write" eval="1"/>
+    <field name="perm_create" eval="1"/>
+    <field name="perm_unlink" eval="0"/>
 </odoo>
