@@ -8,7 +8,7 @@ class CancelReasonWizard(models.TransientModel):
     reason = fields.Text(string='Причина отмены', required=True)
 
     def action_confirm(self):
-        # Передаём активный заказ в контексте
+        """Подтвержение отмены. Передаём активный заказ в контексте"""
         order = self.env['packing.order'].browse(self.env.context.get('active_id'))
         order.write({
             'state': 'cancel',

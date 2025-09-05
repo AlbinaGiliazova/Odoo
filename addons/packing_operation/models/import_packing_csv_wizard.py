@@ -11,6 +11,7 @@ class ImportPackingCsvWizard(models.TransientModel):
     filename = fields.Char()
 
     def action_import_csv(self):
+        """Импорт CSV."""
         if not self.csv_file:
             return
         csv_data = base64.b64decode(self.csv_file)

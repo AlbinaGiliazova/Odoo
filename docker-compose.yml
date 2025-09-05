@@ -20,6 +20,12 @@ services:
     volumes:
       - ./addons:/mnt/extra-addons
       - ./data/filestore:/var/lib/odoo/filestore
+    command:
+      odoo
+      --dev=all
+      --test-enable
+      --test-tags /tests
+      -i your_module
 
 volumes:
   pgdata:

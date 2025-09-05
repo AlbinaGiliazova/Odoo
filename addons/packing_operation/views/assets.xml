@@ -1,0 +1,8 @@
+<odoo>
+    <template id="assets_backend" inherit_id="web.assets_backend" name="Label Info Widget Assets">
+        <xpath expr="." position="inside">
+            <script type="module" src="/packing_operation/static/src/js/label_info_widget.js"/>
+            <template id="label_templates" src="/packing_operation/static/src/xml/label_info_templates.xml"/>
+        </xpath>
+    </template>
+</odoo>

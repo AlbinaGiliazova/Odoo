@@ -24,7 +24,7 @@
                     <group>
                         <field name="name" string="Название"/>
                         <field name="state" readonly="1" string="Статус"/>
-                        <field name="user_id" string="Пользователь"/>
+                        <field name="user_id" string="Оператор"/>
                         <field name="full_packing_date" string="Дата полной упаковки"/>
                     </group>
                     <notebook>
@@ -81,6 +81,8 @@
                                 class="btn-primary"/>
                     </footer>
                     <field name="state" invisible="1"/>
+                    <field name="name" invisible="1"/>
+                    <field name="id" invisible="1"/>
                 </sheet>
             </form>
         </field>

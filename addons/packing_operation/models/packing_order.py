@@ -34,16 +34,17 @@ class PackingOrder(models.Model):
 
     @api.model
     def create(self, vals):
+        """Создание заказа."""
         if vals.get('name', _('New')) == _('New'):
             vals['name'] = self.env['ir.sequence'].next_by_code('packing.order') or _('New')
         return super().create(vals)
 
-    # Запустить упаковку
     def action_start_packing(self):
+        """Запустить упаковку"""
         self.write({'state': 'in_progress'})
 
-    # Завершить упаковку с проверкой и печатью этикетки
     def action_mark_done(self):
+        """Завершить упаковку"""
         for order in self:
             # Проверяем, что по всем строкам packed_qty >= product_qty
             not_ready = order.line_ids.filtered(lambda l: l.packed_qty < l.product_qty)
@@ -53,15 +54,13 @@ class PackingOrder(models.Model):
                 'state': 'done',
                 'full_packing_date': fields.Datetime.now()
             })
-            order._print_label()
 
-    def _print_label(self):
-    # Выводим на экран (консоль) имя модели и id записи
-        for record in self:
-            print(f"Этикетка для модели: {record._name}, ID: {record.id}")
-
-    # Отменить заказ и запросить причину
+    def action_print_label_dummy(self):
+        """Заглушка."""
+        return True
+    
     def action_cancel_order(self):
+        """Отменить заказ и запросить причину"""
         return {
             'type': 'ir.actions.act_window',
             'res_model': 'packing.order.cancel.reason.wizard',
@@ -70,8 +69,8 @@ class PackingOrder(models.Model):
             'context': {'active_id': self.id},
         }
 
-    # Сбросить упаковку (обнулить packed_qty для всех строк)
     def reset_packing(self):
+        """Сбросить упаковку (обнулить packed_qty для всех строк)"""
         for order in self:
             order.line_ids.write({'packed_qty': 0})
         # Опционально возвращаем статус в начальный
@@ -79,6 +78,7 @@ class PackingOrder(models.Model):
 
     @api.onchange('barcode_scanner')
     def _onchange_barcode_scanner(self):
+        """Обработка сканера."""
         if self.barcode_scanner:
             for line in self.line_ids:
                 if str(line.product_id.id) == self.barcode_scanner:
@@ -90,6 +90,7 @@ class PackingOrder(models.Model):
 
     @api.depends('line_ids.state')
     def _compute_state(self):
+        """Вычисление статуса."""
         for order in self:
             line_states = order.line_ids.mapped('state')
             if not line_states:
@@ -102,6 +103,7 @@ class PackingOrder(models.Model):
                 order.state = 'waiting'
 
     def action_open_packing_process(self):
+       """Начало процесса упаковки."""
        # self – конкретный заказ
        return {
            'type': 'ir.actions.act_window',
@@ -112,9 +114,9 @@ class PackingOrder(models.Model):
            'res_id': self.id,
            # можно добавить дополнительные параметры в context
        }
-    
+        
     def process_barcode_scan(self, product_id):
-        """Увеличить счетчик packed_qty в строке заказа по product_id"""
+        """Увеличить счетчик packed_qty в строке заказа по product_id и записать последнего оператора"""
         self.ensure_one()
         line = self.line_ids.filtered(lambda l: l.product_id.id == product_id)
         if not line:
@@ -122,9 +124,9 @@ class PackingOrder(models.Model):
         if line.packed_qty >= line.product_qty:
             raise UserError("Все детали этого типа уже упакованы!")
         line.packed_qty += 1
-        # Хотите — сохраняйте дату упаковки
         line.packing_date = fields.Datetime.now()
-        # Можно возвращать сообщение или статус, если нужно
+        # Записываем пользователя, который упаковал деталь последним
+        self.user_id = self.env.user.id
         return {'status': 'success', 'packed_qty': line.packed_qty}
 
     def _update_full_packing_date(self):
@@ -137,3 +139,8 @@ class PackingOrder(models.Model):
         else:
             # Если ни одной строки не упаковано, очищаем поле
             self.full_packing_date = False
+
+    def _compute_label_info(self):
+        """Формирует текст этикетки."""
+        for rec in self:
+            rec.label_info = f"packing.order: {rec.name}\nID: {rec.id}" if rec.state == 'done' else ""

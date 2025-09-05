@@ -62,6 +62,7 @@ class PackingOrderLine(models.Model):
 
     @api.depends("product_id.length", "product_id.width", "product_id.height")
     def _compute_dimensions(self):
+        """Вычисление габаритов."""
         for line in self:
             if line.product_id:
                 l = int(line.product_id.length or 0)
@@ -73,6 +74,7 @@ class PackingOrderLine(models.Model):
 
     @api.model
     def write(self, vals):
+        """Запись упакованного количества."""
         res = super().write(vals)
         if 'packed_qty' in vals:
             for line in self:
@@ -82,6 +84,7 @@ class PackingOrderLine(models.Model):
 
     @api.depends('packed_qty', 'product_qty')
     def _compute_state(self):
+        """Вычисление статуса."""
         for line in self:
             if line.packed_qty >= line.product_qty:
                 line.state = 'done'
@@ -93,6 +96,7 @@ class PackingOrderLine(models.Model):
     
     @api.model
     def increase_counter(self, value):
+        """Увеличение счётчика."""
         product = self.env['product.product'].browse(int(value))
         if product:
-            product.packed_count += 1  # замените на нужное поле
+            product.packed_count += 1

@@ -11,6 +11,7 @@
     'assets': {
     'web.assets_backend': [
         'static/src/js/barcode_scanner.js',
+        'static/src/js/packing_label.js',
     ],},
     "data": [
         "security/packing_security.xml",
