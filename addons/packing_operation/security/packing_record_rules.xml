@@ -54,7 +54,7 @@
     <field name="name">User: No delete Orders</field>
     <field name="model_id" ref="model_packing_order"/>
     <field name="domain_force">[]</field>
-    <field name="groups" eval="[(4, ref('packing_operation.group_packing_manager'))]"/>
+    <field name="groups" eval="[(4, ref('packing_operation.group_packing_user'))]"/>
     <field name="perm_read" eval="1"/>
     <field name="perm_write" eval="1"/>
     <field name="perm_create" eval="1"/>
@@ -64,7 +64,7 @@
     <field name="name">User: No delete Packing Orders Lines</field>
     <field name="model_id" ref="model_packing_order_line"/>
     <field name="domain_force">[]</field>
-    <field name="groups" eval="[(4, ref('packing_operation.group_packing_manager'))]"/>
+    <field name="groups" eval="[(4, ref('packing_operation.group_packing_user'))]"/>
     <field name="perm_read" eval="1"/>
     <field name="perm_write" eval="1"/>
     <field name="perm_create" eval="1"/>
@@ -74,7 +74,7 @@
     <field name="name">User: No delete Products</field>
     <field name="model_id" ref="model_product_product"/>
     <field name="domain_force">[]</field>
-    <field name="groups" eval="[(4, ref('packing_operation.group_packing_manager'))]"/>
+    <field name="groups" eval="[(4, ref('packing_operation.group_packing_user'))]"/>
     <field name="perm_read" eval="1"/>
     <field name="perm_write" eval="1"/>
     <field name="perm_create" eval="1"/>
